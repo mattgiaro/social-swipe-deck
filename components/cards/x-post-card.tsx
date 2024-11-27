@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { MessageCircle, Repeat2, Heart } from "lucide-react"
+import { MessageCircle, Repeat2, Heart, ExternalLink } from "lucide-react"
 import { Database } from '@/lib/database.types'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
@@ -14,7 +14,6 @@ interface XPostCardProps {
   isBlurred?: boolean
 }
 
-// Extracted BlueCheckmark component
 function BlueCheckmark() {
   return (
     <span className="text-[#1d9bf0]">
@@ -25,7 +24,6 @@ function BlueCheckmark() {
   )
 }
 
-// Add this utility function
 const formatNumber = (num: number): string => {
   if (num >= 1000000) {
     return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}m`
@@ -37,7 +35,6 @@ const formatNumber = (num: number): string => {
 }
 
 export function XPostCard({ post, isBlurred = false }: XPostCardProps) {
-  // Get creator initials for avatar fallback
   const getInitials = (name: string = 'Anonymous') => {
     return name
       .split(' ')
@@ -46,72 +43,99 @@ export function XPostCard({ post, isBlurred = false }: XPostCardProps) {
       .toUpperCase()
   }
 
-  // Safely access creator data with fallbacks
   const creatorName = post.creator?.name || 'Anonymous'
   const creatorHandle = post.creator?.x_handle || 'unknown'
   const profilePicture = post.creator?.profile_picture || ''
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full max-w-[550px] mx-auto">
       <Card className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-        <CardContent className="p-4">
-          <div className="flex gap-3">
-            <Avatar className="h-12 w-12">
-              <AvatarImage 
-                src={profilePicture} 
-                alt={creatorName} 
-              />
-              <AvatarFallback>{getInitials(creatorName)}</AvatarFallback>
-            </Avatar>
+        <CardContent className="p-3 sm:p-4">
+          <div className="flex gap-2 sm:gap-3">
+            <div className="flex-shrink-0">
+              <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+                <AvatarImage 
+                  src={profilePicture} 
+                  alt={creatorName}
+                  className="object-cover"
+                  width={48}
+                  height={48}
+                />
+                <AvatarFallback>{getInitials(creatorName)}</AvatarFallback>
+              </Avatar>
+            </div>
             
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="flex flex-col">
-                <div className="flex items-center gap-1">
-                  <span className="font-bold text-[15px]">{creatorName}</span>
+                <div className="flex items-center gap-1 flex-wrap">
+                  <span className="font-bold text-sm sm:text-[15px] truncate">
+                    {creatorName}
+                  </span>
                   {post.creator && <BlueCheckmark />}
                 </div>
-                <span className="text-gray-500 text-[15px]">{creatorHandle}</span>
+                <span className="text-gray-500 text-sm sm:text-[15px] truncate">
+                  {creatorHandle}
+                </span>
               </div>
               
-              <div className="mt-1 space-y-3 text-[15px] relative">
+              <div className="mt-1 space-y-2 sm:space-y-3 text-sm sm:text-[15px] relative">
                 <div className={cn(
-                  "whitespace-pre-wrap",
+                  "whitespace-pre-wrap break-words",
                   isBlurred && "blur-sm select-none"
                 )}>
                   {post.content}
                 </div>
                 
                 {post.image && (
-                  <div className="relative mt-3 aspect-video w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800">
-                    <Image
-                      src={post.image}
-                      alt="Post image"
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="relative mt-2 sm:mt-3 w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <div className="aspect-[16/9] relative">
+                      <Image
+                        src={post.image}
+                        alt="Post image"
+                        fill
+                        sizes="(max-width: 550px) 100vw, 550px"
+                        className="object-cover object-center"
+                        priority={false}
+                        quality={85}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
               
-              <div className="mt-3 flex gap-6 text-gray-500">
-                <button className="flex items-center gap-1 hover:text-blue-500 transition group">
-                  <MessageCircle className="h-3.5 w-3.5" />
-                  <span className="text-xs group-hover:text-blue-500">
-                    {formatNumber(post.comments)}
-                  </span>
-                </button>
-                <button className="flex items-center gap-1 hover:text-green-500 transition group">
-                  <Repeat2 className="h-3.5 w-3.5" />
-                  <span className="text-xs group-hover:text-green-500">
-                    {formatNumber(post.shares)}
-                  </span>
-                </button>
-                <button className="flex items-center gap-1 hover:text-pink-500 transition group">
-                  <Heart className="h-3.5 w-3.5" />
-                  <span className="text-xs group-hover:text-pink-500">
-                    {formatNumber(post.likes)}
-                  </span>
-                </button>
+              <div className="mt-2 sm:mt-3 flex justify-between items-center">
+                <div className="flex gap-4 sm:gap-6 text-gray-500">
+                  <button className="flex items-center gap-1 hover:text-blue-500 transition group">
+                    <MessageCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <span className="text-[11px] sm:text-xs group-hover:text-blue-500">
+                      {formatNumber(post.comments)}
+                    </span>
+                  </button>
+                  <button className="flex items-center gap-1 hover:text-green-500 transition group">
+                    <Repeat2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <span className="text-[11px] sm:text-xs group-hover:text-green-500">
+                      {formatNumber(post.shares)}
+                    </span>
+                  </button>
+                  <button className="flex items-center gap-1 hover:text-pink-500 transition group">
+                    <Heart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <span className="text-[11px] sm:text-xs group-hover:text-pink-500">
+                      {formatNumber(post.likes)}
+                    </span>
+                  </button>
+                </div>
+                
+                {post.post_url && (
+                  <a
+                    href={post.post_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 hover:text-blue-500 transition ml-2"
+                    title="Open original post"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  </a>
+                )}
               </div>
             </div>
           </div>

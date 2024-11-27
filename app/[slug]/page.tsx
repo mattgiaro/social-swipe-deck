@@ -82,6 +82,9 @@ export default async function CreatorPlatformPage({
   const PostCard = PostCardComponents[platform as keyof PostCardComponents]
   if (!PostCard) return notFound()
 
+  // Limit posts to first 10
+  const limitedPosts = posts.slice(0, 10)
+
   return (
     <main className="min-h-screen py-12 container mx-auto px-4">
       {/* Creator Header - Centered */}
@@ -98,7 +101,7 @@ export default async function CreatorPlatformPage({
             <h1 className="text-4xl font-bold mb-2">
               {creator.name}'s Best {platform} Posts
             </h1>
-            <span className="text-sm font-light text-muted-foreground">
+            <span className="text-sm text-gray-500">
               {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
             </span>
           </div>
@@ -110,7 +113,7 @@ export default async function CreatorPlatformPage({
 
       {/* Posts Grid - Centered with max width */}
       <div className="grid gap-8 mx-auto max-w-[750px] px-4">
-        {posts.map((post, index) => (
+        {limitedPosts.map((post, index) => (
           <div key={post.post_id} className="space-y-6">
             <h2 className="text-2xl font-semibold">
               Post #{index + 1}
@@ -128,6 +131,15 @@ export default async function CreatorPlatformPage({
             )}
           </div>
         ))}
+
+        {/* Show message if there are more posts */}
+        {posts.length > 10 && (
+          <div className="text-center pt-8 border-t border-gray-200">
+            <p className="text-muted-foreground">
+              Showing 10 of {posts.length} posts. Sign up to see more.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* CTA Section */}
