@@ -331,7 +331,7 @@ We'll use [slug] to generate the pages.
    - Fetch and display featured posts for the specified creator and platform.
    - Include explanations and structured page content.
 
-  I’m assuming you’re /[slug]/page.tsx would be your file path
+/[slug]/page.tsx is our file path
 
 In page.tsx, you can have a server component which will have access to a params object like this:
 
@@ -466,3 +466,7 @@ Once you get the values back, you can make your supabase db calls to get the dat
 │   └── user.ts
 ├── middleware.ts
 └── package.json
+
+# MISC
+
+Our main colors are white, black, and #5445ff
