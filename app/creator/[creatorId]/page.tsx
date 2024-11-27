@@ -41,7 +41,6 @@ async function getCreatorPosts(creatorId: string, platform?: Platform) {
     .select('*')
     .eq('creator_id', creatorId)
     .order('date_published', { ascending: false })
-    .limit(10)
 
   if (platform) {
     query.eq('platform', platform)
