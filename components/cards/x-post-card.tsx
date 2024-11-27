@@ -25,6 +25,17 @@ function BlueCheckmark() {
   )
 }
 
+// Add this utility function
+const formatNumber = (num: number): string => {
+  if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}m`
+  }
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(1).replace(/\.0$/, '')}k`
+  }
+  return num.toString()
+}
+
 export function XPostCard({ post, isBlurred = false }: XPostCardProps) {
   // Get creator initials for avatar fallback
   const getInitials = (name: string = 'Anonymous') => {
@@ -84,16 +95,22 @@ export function XPostCard({ post, isBlurred = false }: XPostCardProps) {
               
               <div className="mt-3 flex gap-6 text-gray-500">
                 <button className="flex items-center gap-1 hover:text-blue-500 transition group">
-                  <MessageCircle className="h-4 w-4" />
-                  <span className="text-sm group-hover:text-blue-500">{post.comments}</span>
+                  <MessageCircle className="h-3.5 w-3.5" />
+                  <span className="text-xs group-hover:text-blue-500">
+                    {formatNumber(post.comments)}
+                  </span>
                 </button>
                 <button className="flex items-center gap-1 hover:text-green-500 transition group">
-                  <Repeat2 className="h-4 w-4" />
-                  <span className="text-sm group-hover:text-green-500">{post.shares}</span>
+                  <Repeat2 className="h-3.5 w-3.5" />
+                  <span className="text-xs group-hover:text-green-500">
+                    {formatNumber(post.shares)}
+                  </span>
                 </button>
                 <button className="flex items-center gap-1 hover:text-pink-500 transition group">
-                  <Heart className="h-4 w-4" />
-                  <span className="text-sm group-hover:text-pink-500">{post.likes}</span>
+                  <Heart className="h-3.5 w-3.5" />
+                  <span className="text-xs group-hover:text-pink-500">
+                    {formatNumber(post.likes)}
+                  </span>
                 </button>
               </div>
             </div>

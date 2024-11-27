@@ -22,7 +22,10 @@ export function Header() {
         </Link>
 
         {/* Sign Up Button */}
-        <Button asChild>
+        <Button 
+          asChild
+          className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white"
+        >
           <Link href="/sign-up">
             SIGN UP FOR FREE
           </Link>
