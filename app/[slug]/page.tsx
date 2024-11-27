@@ -8,6 +8,7 @@ import { LinkedInPostCard } from '@/components/cards/linkedin-post-card'
 import { SubstackPostCard } from '@/components/cards/substack-post-card'
 import { Badge } from '@/components/ui/badge'
 import { parseCreatorPageUrl } from '@/lib/utils'
+import Script from 'next/script'
 
 // Add type for the post
 type Post = {
@@ -30,6 +31,69 @@ type PostCardComponents = {
   'Substack': typeof SubstackPostCard
 }
 
+// Add StructuredData component
+function StructuredData({ 
+  creator, 
+  posts, 
+  platform 
+}: { 
+  creator: any;
+  posts: Post[];
+  platform: string;
+}) {
+  // Safely access the handle
+  const handle = creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]
+  const platformUrl = platform === 'X' ? 'twitter' : platform.toLowerCase()
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    mainEntity: {
+      '@type': 'Person',
+      name: creator.name,
+      description: creator.bio || '',
+      image: creator.profile_picture,
+      sameAs: [
+        `https://${platformUrl}.com/${handle}`,
+      ],
+    },
+    about: {
+      '@type': 'ItemList',
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, index) => ({
+        '@type': 'SocialMediaPosting',
+        '@id': post.post_url,
+        position: index + 1,
+        url: post.post_url,
+        datePublished: post.date_published,
+        interactionStatistic: [
+          {
+            '@type': 'InteractionCounter',
+            interactionType: 'https://schema.org/LikeAction',
+            userInteractionCount: post.likes
+          },
+          {
+            '@type': 'InteractionCounter',
+            interactionType: 'https://schema.org/CommentAction',
+            userInteractionCount: post.comments
+          },
+          {
+            '@type': 'InteractionCounter',
+            interactionType: 'https://schema.org/ShareAction',
+            userInteractionCount: post.shares
+          }
+        ]
+      }))
+    }
+  }
+
+  return (
+    <Script id="structured-data" type="application/ld+json">
+      {JSON.stringify(structuredData)}
+    </Script>
+  )
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({ 
   params 
@@ -40,15 +104,63 @@ export async function generateMetadata({
   if (!parsed) return { title: 'Not Found' }
 
   const { creatorId, platform } = parsed
-  const { creator } = await getCreatorByIdAndPlatform(creatorId, platform)
+  const { creator, posts } = await getCreatorByIdAndPlatform(creatorId, platform)
   
   if (!creator) return { title: 'Not Found' }
 
+  // Calculate total engagement for meta description
+  const totalEngagement = posts.reduce((sum, post) => 
+    sum + post.likes + post.comments + post.shares, 0
+  )
+
+  const handle = creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]
+  const baseTitle = `${creator.name}'s Best ${platform} Posts`
+  const bio = creator.bio || '' // Add fallback for bio
+
+  // Safely truncate bio for Twitter
+  const truncatedBio = bio.length > 200 
+    ? `${bio.slice(0, 200)}...`
+    : bio
+
   return {
-    title: `${creator.name}'s Best ${platform} Posts - Social Media Swipe File`,
-    description: creator.bio,
+    title: `${baseTitle} - Social Media Swipe File`,
+    description: `Discover ${creator.name}'s top performing ${platform} content. Analysis of ${posts.length} viral posts with ${totalEngagement.toLocaleString()} total engagements. ${bio}`,
+    keywords: [
+      creator.name,
+      platform,
+      'social media',
+      'viral posts',
+      'content creation',
+      'social media strategy',
+      `${platform.toLowerCase()} marketing`,
+      'engagement analysis'
+    ],
+    authors: [{ name: creator.name }],
     openGraph: {
-      images: [{ url: creator.profile_picture }]
+      title: baseTitle,
+      description: bio,
+      images: [{
+        url: creator.profile_picture,
+        width: 1200,
+        height: 630,
+        alt: `${creator.name}'s profile picture`
+      }],
+      type: 'profile',
+      siteName: 'Social Media Swipe File'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: baseTitle,
+      description: truncatedBio,
+      creator: `@${handle}`,
+      images: [creator.profile_picture],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
     }
   }
 }
@@ -86,77 +198,115 @@ export default async function CreatorPlatformPage({
   const limitedPosts = posts.slice(0, 10)
 
   return (
-    <main className="min-h-screen py-12 container mx-auto px-4">
-      {/* Creator Header - Centered */}
-      <div className="mb-12 flex flex-col items-center text-center">
-        <div className="flex flex-col items-center gap-6 mb-6">
-          <Image
-            src={creator.profile_picture}
-            alt={creator.name}
-            width={100}
-            height={100}
-            className="rounded-full"
-          />
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-2">
-              {creator.name}'s Best {platform} Posts
-            </h1>
-            <span className="text-sm text-gray-500">
-              {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
-            </span>
-          </div>
-        </div>
-        <p className="text-lg text-muted-foreground max-w-3xl">
-          {creator.bio}
-        </p>
-      </div>
+    <>
+      <StructuredData creator={creator} posts={limitedPosts} platform={platform} />
+      <main className="min-h-screen py-12 container mx-auto px-4" role="main">
+        <article className="h-feed">
+          {/* Creator Header - Centered */}
+          <header className="mb-12 flex flex-col items-center text-center">
+            <div className="flex flex-col items-center gap-6 mb-6">
+              <Image
+                src={creator.profile_picture}
+                alt={`Profile picture of ${creator.name}`}
+                width={100}
+                height={100}
+                className="rounded-full"
+                priority
+              />
+              <div className="text-center">
+                <h1 className="text-4xl font-bold mb-2">
+                  <span className="p-name">{creator.name}</span>'s Best {platform} Posts
+                </h1>
+                <span 
+                  className="text-sm text-gray-500 p-nickname"
+                  aria-label={`${platform} handle`}
+                >
+                  {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
+                </span>
+              </div>
+            </div>
+            <p 
+              className="text-lg text-muted-foreground max-w-3xl p-summary"
+              aria-label="Creator biography"
+            >
+              {creator.bio}
+            </p>
+          </header>
 
-      {/* Posts Grid - Centered with max width */}
-      <div className="grid gap-8 mx-auto max-w-[750px] px-4">
-        {limitedPosts.map((post, index) => (
-          <div key={post.post_id} className="space-y-6">
-            <h2 className="text-2xl font-semibold">
-              Post #{index + 1}
-            </h2>
-            <PostCard post={post} />
-            {post.explanation && (
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="font-semibold mb-2">Why This Post Performed Well</h3>
-                  <p className="text-muted-foreground whitespace-pre-wrap">
-                    {post.explanation}
-                  </p>
-                </CardContent>
-              </Card>
+          {/* Posts Grid - Centered with max width */}
+          <div 
+            className="grid gap-8 mx-auto max-w-[750px] px-4"
+            role="feed"
+            aria-label={`${creator.name}'s top ${platform} posts`}
+          >
+            {limitedPosts.map((post, index) => (
+              <article 
+                key={post.post_id} 
+                className="h-entry space-y-6"
+                aria-labelledby={`post-title-${post.post_id}`}
+              >
+                <div className="px-4">
+                  <h2 
+                    id={`post-title-${post.post_id}`}
+                    className="text-3xl font-bold p-name"
+                  >
+                    Post #{index + 1}
+                  </h2>
+                </div>
+                <div className="e-content">
+                  <PostCard post={post} />
+                  {post.explanation && (
+                    <div className="mt-6 px-4 space-y-2">
+                      <h3 className="text-xl font-bold text-foreground">
+                        Why This Post Performed Well
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {post.explanation}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <time 
+                  className="dt-published sr-only" 
+                  dateTime={post.date_published}
+                >
+                  {new Date(post.date_published).toLocaleDateString()}
+                </time>
+              </article>
+            ))}
+
+            {posts.length > 10 && (
+              <div 
+                className="text-center pt-8 border-t border-gray-200"
+                role="status"
+                aria-label="Posts limit notice"
+              >
+                <p className="text-muted-foreground">
+                  Showing 10 of {posts.length} posts. Sign up to see more.
+                </p>
+              </div>
             )}
           </div>
-        ))}
 
-        {/* Show message if there are more posts */}
-        {posts.length > 10 && (
-          <div className="text-center pt-8 border-t border-gray-200">
-            <p className="text-muted-foreground">
-              Showing 10 of {posts.length} posts. Sign up to see more.
+          {/* CTA Section */}
+          <div className="mt-16 text-center max-w-[750px] mx-auto">
+            <h2 className="text-2xl font-bold mb-4">
+              Want to See More Posts?
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Sign up for free to access our complete database of viral posts
             </p>
+            <a 
+              href="/sign-up" 
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90"
+              role="button"
+              aria-label="Create free account"
+            >
+              Create Free Account
+            </a>
           </div>
-        )}
-      </div>
-
-      {/* CTA Section */}
-      <div className="mt-16 text-center max-w-[750px] mx-auto">
-        <h2 className="text-2xl font-bold mb-4">
-          Want to See More Posts?
-        </h2>
-        <p className="text-muted-foreground mb-6">
-          Sign up for free to access our complete database of viral posts
-        </p>
-        <a 
-          href="/sign-up" 
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90"
-        >
-          Create Free Account
-        </a>
-      </div>
-    </main>
+        </article>
+      </main>
+    </>
   )
 }
