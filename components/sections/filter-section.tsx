@@ -1,5 +1,5 @@
 "use client"
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { PlatformFilter } from "@/components/platform-filter"
 
 type Platform = 'X' | 'LinkedIn' | 'Substack'
@@ -11,10 +11,9 @@ export function FilterSection({
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
 
   const handlePlatformChange = (platform: Platform | null) => {
-    console.log('Selected platform:', platform)
-    
     // Create new URLSearchParams
     const params = new URLSearchParams(searchParams)
     
@@ -24,8 +23,11 @@ export function FilterSection({
       params.delete('platform')
     }
 
-    // Update the URL with the new search params
-    router.push(`/?${params.toString()}`)
+    // If we're on the home page, use /?params
+    // If we're on a creator page, use the current path
+    const query = params.toString()
+    const url = pathname + (query ? `?${query}` : '')
+    router.push(url)
   }
 
   return (

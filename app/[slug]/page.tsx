@@ -56,7 +56,7 @@ export async function generateMetadata({
 export default async function CreatorPlatformPage({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: { slug: string }
 }) {
   // Parse the URL to get creatorId and platform
   const parsed = parseCreatorPageUrl(params.slug)
@@ -65,7 +65,10 @@ export default async function CreatorPlatformPage({
   const { creatorId, platform } = parsed
   
   // Fetch creator and their posts
-  const { creator, posts } = await getCreatorByIdAndPlatform(creatorId, platform)
+  const { creator, posts } = await getCreatorByIdAndPlatform(
+    creatorId, 
+    platform
+  )
   if (!creator) return notFound()
 
   // Type the PostCard components object
@@ -81,9 +84,9 @@ export default async function CreatorPlatformPage({
 
   return (
     <main className="min-h-screen py-12 container mx-auto px-4">
-      {/* Creator Header */}
-      <div className="mb-12">
-        <div className="flex items-center gap-6 mb-6">
+      {/* Creator Header - Centered */}
+      <div className="mb-12 flex flex-col items-center text-center">
+        <div className="flex flex-col items-center gap-6 mb-6">
           <Image
             src={creator.profile_picture}
             alt={creator.name}
@@ -91,13 +94,13 @@ export default async function CreatorPlatformPage({
             height={100}
             className="rounded-full"
           />
-          <div>
+          <div className="text-center">
             <h1 className="text-4xl font-bold mb-2">
               {creator.name}'s Best {platform} Posts
             </h1>
-            <Badge variant="secondary" className="text-sm">
-              @{creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
-            </Badge>
+            <span className="text-sm font-light text-muted-foreground">
+              {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
+            </span>
           </div>
         </div>
         <p className="text-lg text-muted-foreground max-w-3xl">
@@ -105,8 +108,8 @@ export default async function CreatorPlatformPage({
         </p>
       </div>
 
-      {/* Posts Grid */}
-      <div className="grid gap-8">
+      {/* Posts Grid - Centered with max width */}
+      <div className="grid gap-8 mx-auto max-w-[750px] px-4">
         {posts.map((post, index) => (
           <div key={post.post_id} className="space-y-6">
             <h2 className="text-2xl font-semibold">
@@ -128,7 +131,7 @@ export default async function CreatorPlatformPage({
       </div>
 
       {/* CTA Section */}
-      <div className="mt-16 text-center">
+      <div className="mt-16 text-center max-w-[750px] mx-auto">
         <h2 className="text-2xl font-bold mb-4">
           Want to See More Posts?
         </h2>

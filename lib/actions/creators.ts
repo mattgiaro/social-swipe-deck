@@ -4,7 +4,11 @@ import { Database } from '@/lib/database.types';
 type Creator = Database['public']['Tables']['creators']['Row'];
 type Post = Database['public']['Tables']['posts']['Row'];
 
-export async function getCreatorByIdAndPlatform(creatorId: string, platform: string) {
+export async function getCreatorByIdAndPlatform(
+  creatorId: string, 
+  platform: string,
+  filterPlatform?: string
+) {
   console.log('🔍 Starting lookup for:', { creatorId, platform })
   
   const handleColumn = `${platform.toLowerCase()}_handle` as 'x_handle' | 'linkedin_handle' | 'substack_handle'
@@ -35,10 +39,20 @@ export async function getCreatorByIdAndPlatform(creatorId: string, platform: str
       return { creator: null, posts: [] }
     }
 
-    // Second query: Get posts
+    // Second query: Get posts with creator data
     const postsQuery = await supabaseAdmin
       .from('posts')
-      .select('*')
+      .select(`
+        *,
+        creator:creators (
+          creator_id,
+          name,
+          x_handle,
+          linkedin_handle,
+          substack_handle,
+          profile_picture
+        )
+      `)
       .eq('creator_id', creatorQuery.data.creator_id)
       .eq('platform', normalizedPlatform)
       .eq('is_featured', true)
@@ -54,9 +68,17 @@ export async function getCreatorByIdAndPlatform(creatorId: string, platform: str
       return { creator: null, posts: [] }
     }
 
+    // Transform the posts to include the creator data
+    const postsWithCreator = postsQuery.data.map(post => ({
+      ...post,
+      creator: post.creator
+    }))
+
     return {
       creator: creatorQuery.data,
-      posts: postsQuery.data
+      posts: filterPlatform && filterPlatform !== platform 
+        ? postsWithCreator.filter(post => post.platform === filterPlatform)
+        : postsWithCreator
     }
   } catch (error) {
     console.error('💥 Unexpected error:', error)
