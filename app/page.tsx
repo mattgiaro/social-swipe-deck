@@ -11,9 +11,13 @@ async function getFeaturedPosts() {
     .from('posts')
     .select(`
       *,
-      creators (
+      creator:creators (
+        creator_id,
         name,
-        profile_picture
+        profile_picture,
+        x_handle,
+        linkedin_handle,
+        substack_handle
       )
     `)
     .eq('home_featured', true)
@@ -91,23 +95,11 @@ export default async function Home() {
             })
 
             return (
-              <div key={post.post_id} className="relative">
-                <XPostCard post={post} />
-                
-                {/* Blur Overlay */}
-                {isBlurred && (
-                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
-                    <div className="text-center p-6">
-                      <h3 className="text-xl font-semibold mb-2">
-                        Want to See More?
-                      </h3>
-                      <p className="text-muted-foreground mb-4">
-                        Create a free account to unlock all content
-                      </p>
-                      <Button>Sign Up Free</Button>
-                    </div>
-                  </div>
-                )}
+              <div key={post.post_id}>
+                <XPostCard 
+                  post={post} 
+                  isBlurred={isBlurred}
+                />
               </div>
             )
           })}
