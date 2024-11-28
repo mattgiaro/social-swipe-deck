@@ -1,20 +1,23 @@
 "use client"
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import { PlatformFilter } from "@/components/platform-filter"
+import { PlatformFilter, PlatformFilterProps } from "@/components/platform-filter"
 
 type Platform = 'X' | 'LinkedIn' | 'Substack'
 
+interface FilterSectionProps {
+  initialPlatform?: Platform
+  availablePlatforms?: Platform[]
+}
+
 export function FilterSection({ 
-  initialPlatform 
-}: { 
-  initialPlatform?: Platform 
-}) {
+  initialPlatform,
+  availablePlatforms = ['X', 'LinkedIn', 'Substack']
+}: FilterSectionProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
   const handlePlatformChange = (platform: Platform | null) => {
-    // Create new URLSearchParams
     const params = new URLSearchParams(searchParams)
     
     if (platform) {
@@ -23,8 +26,6 @@ export function FilterSection({
       params.delete('platform')
     }
 
-    // If we're on the home page, use /?params
-    // If we're on a creator page, use the current path
     const query = params.toString()
     const url = pathname + (query ? `?${query}` : '')
     router.push(url)
@@ -35,6 +36,7 @@ export function FilterSection({
       className="mb-12"
       selectedPlatform={initialPlatform}
       onPlatformChange={handlePlatformChange}
+      availablePlatforms={availablePlatforms}
     />
   )
 } 

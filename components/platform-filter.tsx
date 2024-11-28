@@ -4,16 +4,18 @@ import { cn } from "@/lib/utils"
 
 type Platform = 'X' | 'LinkedIn' | 'Substack'
 
-interface PlatformFilterProps {
-  selectedPlatform?: Platform | null
-  onPlatformChange?: (platform: Platform | null) => void
+export interface PlatformFilterProps {
   className?: string
+  selectedPlatform?: Platform
+  onPlatformChange: (platform: Platform | null) => void
+  availablePlatforms?: Platform[]
 }
 
-export function PlatformFilter({ 
-  selectedPlatform, 
+export function PlatformFilter({
+  className,
+  selectedPlatform,
   onPlatformChange,
-  className 
+  availablePlatforms = ['X', 'LinkedIn', 'Substack']
 }: PlatformFilterProps) {
   return (
     <div className={cn("flex justify-center gap-4", className)}>

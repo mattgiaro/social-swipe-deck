@@ -8,6 +8,7 @@ import { SubstackPostCard } from '@/components/cards/substack-post-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { supabaseAdmin } from '@/lib/supabase'
+import { FilterSection } from "@/components/sections/filter-section"
 
 // Types
 type Platform = 'X' | 'LinkedIn' | 'Substack'
@@ -136,27 +137,11 @@ export default async function CreatorPage({
         </p>
       </div>
 
-      {/* Platform Filter */}
-      <div className="flex gap-4 mb-8">
-        <Button
-          variant={!searchParams.platform ? "default" : "outline"}
-          asChild
-        >
-          <a href={`/creator/${params.creatorId}`}>All Platforms</a>
-        </Button>
-        {availablePlatforms.map((platform) => (
-          <Button
-            key={platform}
-            variant={searchParams.platform === platform ? "default" : "outline"}
-            asChild
-          >
-            <a href={`/creator/${params.creatorId}?platform=${platform}`}>
-              <i className={`bi bi-${platform.toLowerCase()} mr-2`} />
-              {platform}
-            </a>
-          </Button>
-        ))}
-      </div>
+      {/* Replace Platform Filter with FilterSection */}
+      <FilterSection 
+        initialPlatform={searchParams.platform}
+        availablePlatforms={availablePlatforms}
+      />
 
       {/* Posts Grid */}
       <div className="grid gap-8">
