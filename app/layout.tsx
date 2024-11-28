@@ -1,4 +1,7 @@
+'use client'
+
 import * as React from "react"
+import { usePathname } from 'next/navigation'
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
@@ -12,6 +15,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+  const isAuthPage = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -39,7 +45,7 @@ export default function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
-          <Footer />
+          {!isAuthPage && <Footer />}
         </body>
       </html>
     </ClerkProvider>

@@ -14,13 +14,13 @@ export default function SignInPage({
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <SignIn 
-        routing="hash"
+        path="/sign-in"
         appearance={{
           elements: {
             rootBox: "mx-auto w-full max-w-md",
             card: "rounded-lg shadow-md",
             formButtonPrimary: "bg-[#5445FF] hover:bg-[#5445FF]/90",
-            footerActionLink: "text-[#5445FF] hover:text-[#5445FF]/90"
+            footerActionLink: "text-[#5445FF] hover:bg-[#5445FF]/90"
           }
         }}
         redirectUrl={searchParams.redirect_url || "/onboarding/platform-selection"}

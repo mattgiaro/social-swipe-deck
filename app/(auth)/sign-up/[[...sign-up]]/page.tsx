@@ -10,7 +10,7 @@ export default function SignUpPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <SignUp 
-        routing="hash"
+        path="/sign-up"
         appearance={{
           elements: {
             rootBox: "mx-auto w-full max-w-md",
@@ -23,9 +23,4 @@ export default function SignUpPage() {
       />
     </div>
   )
-}
-
-// Simple sign up component without styling
-export function Page() {
-  return <SignUp />
 }
