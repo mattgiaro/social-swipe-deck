@@ -74,9 +74,7 @@ export async function POST(req: Request) {
   return NextResponse.json({ message: 'Webhook processed' }, { status: 200 });
 }
 
-// Disable body parsing, need raw body for signature verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}; 
+// Update the config to use the new format
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+ 
