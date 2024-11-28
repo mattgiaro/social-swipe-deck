@@ -470,3 +470,5 @@ Once you get the values back, you can make your supabase db calls to get the dat
 # MISC
 
 Our main colors are white, black, and #5445ff
+
+**IMPORTANT: WE USE APP ROUTER IN NEXTJS.**

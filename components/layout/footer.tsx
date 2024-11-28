@@ -56,10 +56,34 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/platform/x" 
+                  href="/best-morgan-housel-x-posts" 
                   className="text-gray-700 transition hover:text-gray-700/75"
                 >
-                  View All X Posts
+                  Best Morgan Housel Posts
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/best-tim-denning-x-posts" 
+                  className="text-gray-700 transition hover:text-gray-700/75"
+                >
+                  Best Tim Denning Posts
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/best-tim-ferriss-x-posts" 
+                  className="text-gray-700 transition hover:text-gray-700/75"
+                >
+                  Best Tim Ferriss Posts
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/best-naval-x-posts" 
+                  className="text-gray-700 transition hover:text-gray-700/75"
+                >
+                  Best Naval Posts
                 </Link>
               </li>
             </ul>
@@ -75,6 +99,7 @@ export function Footer() {
                   className="text-gray-700 transition hover:text-gray-700/75"
                 >
                   Best Justin Welsh Posts
+                  <span className="ml-2 text-gray-400">(Coming soon)</span>
                 </Link>
               </li>
               <li>
@@ -83,6 +108,7 @@ export function Footer() {
                   className="text-gray-700 transition hover:text-gray-700/75"
                 >
                   View All LinkedIn Posts
+                  <span className="ml-2 text-gray-400">(Coming soon)</span>
                 </Link>
               </li>
             </ul>
@@ -98,6 +124,7 @@ export function Footer() {
                   className="text-gray-700 transition hover:text-gray-700/75"
                 >
                   View All Substack Posts
+                  <span className="ml-2 text-gray-400">(Coming soon)</span>
                 </Link>
               </li>
             </ul>
@@ -106,14 +133,20 @@ export function Footer() {
 
         <div className="mt-16">
           <div className="mt-16 sm:flex sm:items-center sm:justify-between">
-            <div className="flex justify-center text-teal-600 sm:justify-start">
-              <Link href="/" className="text-xl font-bold">
+            <div className="flex justify-center sm:justify-start">
+              <Link href="/" className="text-xl font-bold text-black">
                 Social Swipe Deck
               </Link>
             </div>
 
             <p className="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-right">
-              Copyright &copy; {new Date().getFullYear()}. All rights reserved.
+              Copyright &copy; {new Date().getFullYear()}. All rights reserved.{" "}
+              <Link 
+                href="/terms" 
+                className="text-gray-500 hover:text-gray-700"
+              >
+                Terms of Service
+              </Link>
             </p>
           </div>
         </div>
