@@ -10,9 +10,13 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ children }) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+      <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-8 mx-auto sm:px-12 lg:px-16">
         {/* Logo and Name */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link 
+          href="/" 
+          className="flex items-center gap-2"
+          aria-label="Go to homepage"
+        >
           <Image
             src="/logo.png"
             alt="Social Swipe Deck"
@@ -25,17 +29,20 @@ export const Header: React.FC<HeaderProps> = ({ children }) => {
           </span>
         </Link>
 
-        {/* Sign Up Button */}
-        <Button 
-          asChild
-          className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white"
-        >
-          <Link href="/sign-up">
-            SIGN UP FOR FREE
-          </Link>
-        </Button>
-
-        {children}
+        <div className="flex items-center gap-4">
+          {children}
+          
+          {/* Sign Up Button */}
+          <Button 
+            asChild
+            className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white px-6"
+            aria-label="Sign up for free"
+          >
+            <Link href="/sign-up">
+              Sign up for free
+            </Link>
+          </Button>
+        </div>
       </div>
     </header>
   )
