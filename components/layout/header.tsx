@@ -3,10 +3,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
-export function Header() {
+interface HeaderProps {
+  children?: React.ReactNode
+}
+
+export const Header: React.FC<HeaderProps> = ({ children }) => {
   return (
-    <header className="border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
         {/* Logo and Name */}
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -30,6 +34,8 @@ export function Header() {
             SIGN UP FOR FREE
           </Link>
         </Button>
+
+        {children}
       </div>
     </header>
   )
