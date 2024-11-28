@@ -4,17 +4,31 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-
-type Platform = "X" | "LinkedIn" | "Substack"
+import { updatePlatformPreference } from "@/lib/actions/onboarding"
+import type { Platform } from "@/types/user"
 
 export default function PlatformSelectionPage() {
   const router = useRouter()
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handlePlatformSelect = async (platform: Platform) => {
+    setIsLoading(true)
     setSelectedPlatform(platform)
-    // Save selection and navigate to next step
-    router.push("/onboarding/newsletter-opt-in")
+    
+    try {
+      const result = await updatePlatformPreference(platform)
+      if (result.success) {
+        router.push("/onboarding/newsletter-opt-in")
+      } else {
+        throw new Error('Failed to update platform preference')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      // You might want to show an error message to the user
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -29,6 +43,7 @@ export default function PlatformSelectionPage() {
             onClick={() => handlePlatformSelect("X")}
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "X" ? "default" : "outline"}
+            disabled={isLoading}
           >
             <i className="bi bi-twitter text-xl" />
             X (Twitter)
@@ -38,6 +53,7 @@ export default function PlatformSelectionPage() {
             onClick={() => handlePlatformSelect("LinkedIn")}
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "LinkedIn" ? "default" : "outline"}
+            disabled={isLoading}
           >
             <i className="bi bi-linkedin text-xl" />
             LinkedIn
@@ -47,6 +63,7 @@ export default function PlatformSelectionPage() {
             onClick={() => handlePlatformSelect("Substack")}
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "Substack" ? "default" : "outline"}
+            disabled={isLoading}
           >
             <i className="bi bi-substack text-xl" />
             Substack

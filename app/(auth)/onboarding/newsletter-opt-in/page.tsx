@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { updateNewsletterPreference } from "@/lib/actions/onboarding"
 
 export default function NewsletterOptInPage() {
   const router = useRouter()
@@ -12,11 +13,15 @@ export default function NewsletterOptInPage() {
   const handleResponse = async (optIn: boolean) => {
     setIsLoading(true)
     try {
-      // Save preference and complete onboarding
-      // Redirect to home page or dashboard
-      router.push("/")
+      const result = await updateNewsletterPreference(optIn)
+      if (result.success) {
+        router.push("/")
+      } else {
+        throw new Error('Failed to update newsletter preference')
+      }
     } catch (error) {
       console.error("Error saving preference:", error)
+      // You might want to show an error message to the user
     } finally {
       setIsLoading(false)
     }

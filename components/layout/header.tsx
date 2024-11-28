@@ -1,6 +1,7 @@
 import * as React from "react"
 import Link from 'next/link'
 import Image from 'next/image'
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { Button } from '@/components/ui/button'
 
 interface HeaderProps {
@@ -32,16 +33,10 @@ export const Header: React.FC<HeaderProps> = ({ children }) => {
         <div className="flex items-center gap-4">
           {children}
           
-          {/* Sign Up Button */}
-          <Button 
-            asChild
-            className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white px-6"
-            aria-label="Sign up for free"
-          >
-            <Link href="/sign-up">
-              Sign up for free
-            </Link>
-          </Button>
+          {/* Auth Button - Single Instance */}
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
     </header>

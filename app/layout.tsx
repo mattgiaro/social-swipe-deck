@@ -7,6 +7,8 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,18 +31,17 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           <Header>
-            <div className="ml-auto flex items-center gap-2">
-              <SignedOut>
-                <SignInButton>
-                  <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90">
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
-            </div>
+            <SignedOut>
+              <Button 
+                asChild
+                className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white px-6"
+                aria-label="Sign up for free"
+              >
+                <Link href="/sign-up">
+                  Sign up for free
+                </Link>
+              </Button>
+            </SignedOut>
           </Header>
           <main className="min-h-screen">
             {children}
