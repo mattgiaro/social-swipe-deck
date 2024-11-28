@@ -6,6 +6,7 @@ import { getFeaturedPosts } from "@/lib/actions/posts"
 import { XPostCard } from "@/components/cards/x-post-card"
 import { LinkedInPostCard } from "@/components/cards/linkedin-post-card"
 import { SubstackPostCard } from "@/components/cards/substack-post-card"
+import { SearchBar } from "@/components/search/search-bar"
 
 // Server Component for Posts
 async function Posts({ platform }: { platform?: 'X' | 'LinkedIn' | 'Substack' | null }) {
@@ -52,6 +53,9 @@ export default async function Home({
         <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
           Uncover over 1,394 viral posts by top creators across X, LinkedIn, and Substack.
         </p>
+        <div className="mt-8 w-full max-w-md">
+          <SearchBar />
+        </div>
         <div className="mt-10">
           <Button 
             size="lg" 

@@ -113,46 +113,30 @@ export default async function CreatorPage({
 
   return (
     <main className="min-h-screen py-12 container mx-auto px-4">
-      {/* Creator Header */}
-      <div className="mb-12">
-        <div className="flex items-center gap-6 mb-6">
+      {/* Creator Header - Centered with flex */}
+      <div className="mb-12 flex justify-center">
+        <div className="flex items-center gap-8">
           <Image
             src={creator.profile_picture}
             alt={creator.name}
-            width={100}
-            height={100}
+            width={56}
+            height={56}
             className="rounded-full"
+            priority
           />
-          <div>
-            <h1 className="text-4xl font-bold mb-2">{creator.name}</h1>
-            <div className="flex gap-2">
-              {creator.x_handle && (
-                <Badge variant="secondary">
-                  <i className="bi bi-twitter mr-1" />
-                  @{creator.x_handle}
-                </Badge>
-              )}
-              {creator.linkedin_handle && (
-                <Badge variant="secondary">
-                  <i className="bi bi-linkedin mr-1" />
-                  {creator.linkedin_handle}
-                </Badge>
-              )}
-              {creator.substack_handle && (
-                <Badge variant="secondary">
-                  <i className="bi bi-substack mr-1" />
-                  {creator.substack_handle}
-                </Badge>
-              )}
-            </div>
-          </div>
+          <h1 className="text-[56px] font-bold leading-none">
+            {creator.name}
+          </h1>
         </div>
-        <p className="text-lg text-muted-foreground max-w-3xl">
+      </div>
+
+      {/* Bio section moved outside the header flex container */}
+      <div className="mb-12 text-center">
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
           {creator.bio}
         </p>
       </div>
 
-      {/* Replace Platform Filter with FilterSection */}
       <FilterSection 
         initialPlatform={searchParams.platform}
         availablePlatforms={availablePlatforms}
