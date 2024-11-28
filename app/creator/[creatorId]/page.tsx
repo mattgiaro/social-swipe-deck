@@ -39,7 +39,17 @@ async function getCreator(creatorId: string) {
 async function getCreatorPosts(creatorId: string, platform?: Platform) {
   const query = supabaseAdmin
     .from('posts')
-    .select('*')
+    .select(`
+      *,
+      creator:creators (
+        creator_id,
+        name,
+        profile_picture,
+        x_handle,
+        linkedin_handle,
+        substack_handle
+      )
+    `)
     .eq('creator_id', creatorId)
     .order('date_published', { ascending: false })
 
@@ -49,7 +59,12 @@ async function getCreatorPosts(creatorId: string, platform?: Platform) {
 
   const { data, error } = await query
   if (error) return []
-  return data
+  
+  // Transform the posts to include the creator data
+  return data.map(post => ({
+    ...post,
+    creator: post.creator
+  }))
 }
 
 // Generate metadata for SEO
@@ -149,7 +164,10 @@ export default async function CreatorPage({
           const Component = PostCard[post.platform as Platform]
           return (
             <div key={post.post_id}>
-              <Component post={post} />
+              <Component 
+                post={post}
+                isBlurred={false}
+              />
             </div>
           )
         })}
