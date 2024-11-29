@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { Suspense } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -7,6 +8,55 @@ import { XPostCard } from "@/components/cards/x-post-card"
 import { LinkedInPostCard } from "@/components/cards/linkedin-post-card"
 import { SubstackPostCard } from "@/components/cards/substack-post-card"
 import { SearchBar } from "@/components/search/search-bar"
+
+// Metadata for SEO
+export const metadata: Metadata = {
+  title: 'Social Swipe Deck - Discover Top Performing Social Media Content & Posts',
+  description: 'Directory with swipe social media posts to analyze and learn from over 1,394 viral posts by top creators across X, LinkedIn, and Substack. Grow your social media audience with data-driven insights.',
+  keywords: [
+    'social media swipe file',
+    'best social media posts',
+    'social media analytics',
+    'viral posts',
+    'content creation',
+    'Twitter analytics',
+    'LinkedIn content',
+    'Substack newsletter',
+    'social media growth',
+    'content strategy'
+  ],
+  authors: [{ name: 'Social Swipe Deck' }],
+  openGraph: {
+    type: 'website',
+    title: 'Social Swipe Deck - Viral Social Media Content Analysis',
+    description: 'Discover and analyze top performing content from leading creators across X, LinkedIn, and Substack.',
+    url: 'https://socialswipedeck.com',
+    siteName: 'Social Swipe Deck',
+    images: [{
+      url: '/social-swipe-deck-og.webp', // Make sure this image exists in your public folder
+      width: 1200,
+      height: 630,
+      alt: 'Social Swipe Deck - Social Media Content Analysis'
+    }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Social Swipe Deck - Viral Content Analysis',
+    description: 'Analyze top performing social media content across major platforms',
+    images: ['/social-swipe-deck-og.webp'], // Same image as OG
+    creator: '@socialswipedeck'
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+    'max-video-preview': -1,
+  },
+  alternates: {
+    canonical: 'https://socialswipedeck.com'
+  }
+}
 
 // Server Component for Posts
 async function Posts({ platform }: { platform?: 'X' | 'LinkedIn' | 'Substack' | null }) {
