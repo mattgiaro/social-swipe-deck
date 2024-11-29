@@ -32,11 +32,13 @@ export function FilterSection({
   }
 
   return (
-    <PlatformFilter 
-      className="mb-12"
-      selectedPlatform={initialPlatform}
-      onPlatformChange={handlePlatformChange}
-      availablePlatforms={availablePlatforms}
-    />
+    <div className="container mx-auto px-4">
+      <PlatformFilter 
+        className="mb-12"
+        selectedPlatform={initialPlatform}
+        onPlatformChange={handlePlatformChange}
+        availablePlatforms={availablePlatforms}
+      />
+    </div>
   )
 } 
