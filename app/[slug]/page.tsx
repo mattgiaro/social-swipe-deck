@@ -210,87 +210,84 @@ export default async function CreatorPlatformPage({
   return (
     <>
       <StructuredData creator={creator} posts={limitedPosts} platform={platform} />
-      <main className="min-h-screen py-12 container mx-auto px-4" role="main">
+      <main className="min-h-screen py-12" role="main">
         <article className="h-feed">
-          {/* Creator Header - Centered */}
-          <header className="mb-12 flex flex-col items-center text-center">
-            <div className="flex flex-col items-center gap-6 mb-6">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                <Image
-                  src={creator.profile_picture}
-                  alt={`${creator.name}'s profile picture`}
-                  fill
-                  sizes="(max-width: 768px) 48px, 64px"
-                  className="object-cover"
-                  priority
-                  quality={90}
-                />
+          {/* Creator Header - Keep centered with container */}
+          <div className="container mx-auto px-4">
+            <header className="mb-12 flex flex-col items-center text-center">
+              <div className="flex flex-col items-center gap-6 mb-6">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                  <Image
+                    src={creator.profile_picture}
+                    alt={`${creator.name}'s profile picture`}
+                    fill
+                    sizes="(max-width: 768px) 48px, 64px"
+                    className="object-cover"
+                    priority
+                    quality={90}
+                  />
+                </div>
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold mb-2">
+                    <span className="p-name">{creator.name}</span>'s Best {platform} Posts
+                  </h1>
+                  <span 
+                    className="text-sm text-gray-500 p-nickname"
+                    aria-label={`${platform} handle`}
+                  >
+                    {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
+                  </span>
+                </div>
               </div>
-              <div className="text-center">
-                <h1 className="text-4xl font-bold mb-2">
-                  <span className="p-name">{creator.name}</span>'s Best {platform} Posts
-                </h1>
-                <span 
-                  className="text-sm text-gray-500 p-nickname"
-                  aria-label={`${platform} handle`}
-                >
-                  {creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]}
-                </span>
-              </div>
-            </div>
-            <p 
-              className="text-lg text-muted-foreground max-w-3xl p-summary"
-              aria-label="Creator biography"
-            >
-              {creator.bio}
-            </p>
-          </header>
+              <p 
+                className="text-lg text-muted-foreground max-w-3xl p-summary"
+                aria-label="Creator biography"
+              >
+                {creator.bio}
+              </p>
+            </header>
+          </div>
 
-          {/* Posts Grid - Centered with max width */}
+          {/* Posts Grid - Full width */}
           <div 
-            className="grid gap-8 mx-auto max-w-[750px] px-4"
+            className="grid gap-8"
             role="feed"
             aria-label={`${creator.name}'s top ${platform} posts`}
           >
             {limitedPosts.map((post, index) => (
               <article 
                 key={post.post_id} 
-                className="h-entry space-y-6"
+                className={`h-entry space-y-6 p-6 ${
+                  index % 2 === 0 
+                    ? 'bg-white' 
+                    : 'bg-[#5445ff]/10'
+                }`}
                 aria-labelledby={`post-title-${post.post_id}`}
               >
-                <div className="px-4">
-                  <h2 
-                    id={`post-title-${post.post_id}`}
-                    className="text-3xl font-bold p-name"
-                  >
-                    Post #{index + 1}
-                  </h2>
+                <div className="container mx-auto px-4">
+                  <div className="max-w-[750px] mx-auto w-full">
+                    <h2 
+                      id={`post-title-${post.post_id}`}
+                      className="text-3xl font-bold p-name"
+                    >
+                      Post #{index + 1}
+                    </h2>
+                  </div>
                 </div>
-                <div className="e-content">
-                  {post.image && (
-                    <div className="relative w-full aspect-video mb-4">
-                      <Image
-                        src={post.image}
-                        alt={`Visual content from ${creator.name}'s ${platform} post`}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
-                        className="object-cover rounded-lg"
-                        loading={index === 0 ? "eager" : "lazy"}
-                        quality={85}
-                      />
-                    </div>
-                  )}
-                  <PostCard post={post} />
-                  {post.explanation && (
-                    <div className="mt-6 px-4 space-y-2">
-                      <h3 className="text-xl font-bold text-foreground">
-                        Why This Post Performed Well
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                        {post.explanation}
-                      </p>
-                    </div>
-                  )}
+                <div className="container mx-auto px-4">
+                  <div className="max-w-[750px] mx-auto w-full">
+                    <PostCard post={post} />
+                    {post.explanation && (
+                      <div className="mt-6 space-y-2">
+                        <h3 className="text-xl font-bold text-foreground">
+                          Why This Post Performed Well
+                        </h3>
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                          {post.explanation}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <time 
                   className="dt-published sr-only" 
@@ -300,36 +297,26 @@ export default async function CreatorPlatformPage({
                 </time>
               </article>
             ))}
-
-            {posts.length > 10 && (
-              <div 
-                className="text-center pt-8 border-t border-gray-200"
-                role="status"
-                aria-label="Posts limit notice"
-              >
-                <p className="text-muted-foreground">
-                  Showing 10 of {posts.length} posts. Sign up to see more.
-                </p>
-              </div>
-            )}
           </div>
 
-          {/* CTA Section */}
-          <div className="mt-16 text-center max-w-[750px] mx-auto">
-            <h2 className="text-2xl font-bold mb-4">
-              Want to See More Posts?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Sign up for free to access our complete database of viral posts
-            </p>
-            <a 
-              href="/sign-up" 
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90"
-              role="button"
-              aria-label="Create free account"
-            >
-              Create Free Account
-            </a>
+          {/* CTA Section - Keep centered with container */}
+          <div className="container mx-auto px-4">
+            <div className="mt-16 text-center max-w-[750px] mx-auto">
+              <h2 className="text-2xl font-bold mb-4">
+                Want to See More Posts?
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Sign up for free to access our complete database of viral posts
+              </p>
+              <a 
+                href="/sign-up" 
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90"
+                role="button"
+                aria-label="Create free account"
+              >
+                Create Free Account
+              </a>
+            </div>
           </div>
         </article>
       </main>
