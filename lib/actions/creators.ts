@@ -96,4 +96,55 @@ export async function getAllCreators() {
   }
 
   return creators;
+}
+
+// Add this new function for sitemap generation
+export async function getCreatorsForSitemap() {
+  try {
+    console.log('🔍 Starting sitemap creator fetch')
+    
+    const { data: creators, error } = await supabaseAdmin
+      .from('creators')
+      .select(`
+        creator_id,
+        updated_at,
+        x_handle,
+        linkedin_handle,
+        substack_handle
+      `)
+
+    if (error) {
+      console.error('Error fetching creators for sitemap:', error)
+      throw error
+    }
+
+    console.log('📊 Raw creators data:', creators)
+
+    // Transform the data for sitemap use
+    const transformedCreators = creators.map(creator => {
+      const platforms = []
+      if (creator.x_handle && creator.x_handle.trim() !== '') {
+        platforms.push('X')
+      }
+      if (creator.linkedin_handle && creator.linkedin_handle.trim() !== '') {
+        platforms.push('LinkedIn')
+      }
+      if (creator.substack_handle && creator.substack_handle.trim() !== '') {
+        platforms.push('Substack')
+      }
+
+      return {
+        id: creator.creator_id,
+        platforms,
+        updatedAt: creator.updated_at,
+      }
+    }).filter(creator => creator.platforms.length > 0)
+
+    console.log('✨ Transformed creators:', transformedCreators)
+    return transformedCreators
+
+  } catch (error) {
+    console.error('Error in getCreatorsForSitemap:', error)
+    return [] 
+  }
 } 

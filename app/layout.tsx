@@ -1,54 +1,80 @@
-'use client'
-
 import * as React from "react"
-import { usePathname } from 'next/navigation'
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
-import { Inter } from 'next/font/google'
+import { Metadata } from 'next'
+import { ClientLayout } from '@/app/client-layout'
+import { GeistSans } from 'geist/font/sans'
 import './globals.css'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 
-const inter = Inter({ subsets: ['latin'] })
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://socialswipedeck.com'),
+  title: {
+    template: '%s | Social Swipe Deck',
+    default: 'Social Swipe Deck - Discover Viral Social Media Posts',
+  },
+  description: 'Discover and analyze top-performing social media content from leading creators across X, LinkedIn, and Substack. Get insights into viral posts and content strategies.',
+  keywords: [
+    'social media',
+    'viral posts',
+    'content creation',
+    'X posts',
+    'LinkedIn content',
+    'Substack newsletters',
+    'social media analytics',
+    'content strategy',
+    'digital marketing',
+    'creator economy'
+  ],
+  authors: [{ name: 'Social Swipe Deck' }],
+  creator: 'Social Swipe Deck',
+  publisher: 'Social Swipe Deck',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Social Swipe Deck',
+    title: 'Social Swipe Deck - Discover Viral Social Media Posts',
+    description: 'Discover and analyze top-performing social media content from leading creators across X, LinkedIn, and Substack.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Social Swipe Deck - Viral Social Media Posts',
+    description: 'Discover and analyze top-performing social media content from leading creators.',
+    creator: '@socialswipedeck',
+  },
+  verification: {
+    google: 'google-site-verification-code',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
-  const isAuthPage = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')
-
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <head>
-          <link 
-            rel="stylesheet" 
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" 
-          />
-        </head>
-        <body className={inter.className}>
-          <Header>
-            <SignedOut>
-              <Button 
-                asChild
-                className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white px-6"
-                aria-label="Sign up for free"
-              >
-                <Link href="/sign-up">
-                  Sign up for free
-                </Link>
-              </Button>
-            </SignedOut>
-          </Header>
-          <main className="min-h-screen">
-            {children}
-          </main>
-          {!isAuthPage && <Footer />}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={GeistSans.className}>
+      <head>
+        <link 
+          rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" 
+        />
+      </head>
+      <ClientLayout>
+        {children}
+      </ClientLayout>
+    </html>
   )
 }

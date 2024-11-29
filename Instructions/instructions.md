@@ -467,6 +467,90 @@ Once you get the values back, you can make your supabase db calls to get the dat
 ├── middleware.ts
 └── package.json
 
+
+## CURRENT FILE STRUCTURE
+
+├── Instructions
+│   └── instructions.md
+├── README.md
+├── app
+│   ├── (auth)
+│   │   ├── layout.tsx
+│   │   ├── loading.tsx
+│   │   ├── onboarding
+│   │   ├── sign-in
+│   │   └── sign-up
+│   ├── [slug]
+│   │   └── page.tsx
+│   ├── api
+│   │   ├── creators
+│   │   ├── search
+│   │   └── webhooks
+│   ├── creator
+│   │   └── [creatorId]
+│   ├── favicon.ico
+│   ├── fonts
+│   │   ├── GeistMonoVF.woff
+│   │   └── GeistVF.woff
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── terms
+│       └── page.tsx
+├── components
+│   ├── cards
+│   │   ├── linkedin-post-card.tsx
+│   │   ├── substack-post-card.tsx
+│   │   └── x-post-card.tsx
+│   ├── layout
+│   │   ├── footer.tsx
+│   │   └── header.tsx
+│   ├── platform-filter.tsx
+│   ├── search
+│   │   ├── search-bar.tsx
+│   │   └── search-results.tsx
+│   ├── sections
+│   │   └── filter-section.tsx
+│   └── ui
+│       ├── accordion.tsx
+│       ├── alert-dialog.tsx
+│       ├── alert.tsx
+│       ├── aspect-ratio.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── button.tsx
+│       ├── calendar.tsx
+│       ├── card.tsx
+│       ├── input.tsx
+│       └── select.tsx
+├── hooks
+│   └── use-debounce.ts
+├── lib
+│   ├── actions
+│   │   ├── creators.ts
+│   │   ├── onboarding.ts
+│   │   └── posts.ts
+│   ├── database.types.ts
+│   ├── supabase.ts
+│   └── utils.ts
+├── middleware.ts
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   └── logo.png
+├── supabase
+│   └── requesting_user_id.sql
+├── tailwind.config.ts
+├── tsconfig.json
+├── types
+│   ├── creator.ts
+│   └── user.ts
+└── yarn.lock
+
+
 # MISC
 
 Our main colors are white, black, and #5445ff

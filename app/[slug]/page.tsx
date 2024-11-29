@@ -108,6 +108,9 @@ export async function generateMetadata({
   
   if (!creator) return { title: 'Not Found' }
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://socialswipedeck.com'
+  const canonicalUrl = `${baseUrl}/best-${creatorId}-${platform.toLowerCase()}-posts`
+
   // Calculate total engagement for meta description
   const totalEngagement = posts.reduce((sum, post) => 
     sum + post.likes + post.comments + post.shares, 0
@@ -115,7 +118,7 @@ export async function generateMetadata({
 
   const handle = creator[`${platform.toLowerCase()}_handle` as keyof typeof creator]
   const baseTitle = `${creator.name}'s Best ${platform} Posts`
-  const bio = creator.bio || '' // Add fallback for bio
+  const bio = creator.bio || ''
 
   // Safely truncate bio for Twitter
   const truncatedBio = bio.length > 200 
@@ -123,8 +126,8 @@ export async function generateMetadata({
     : bio
 
   return {
-    title: `${baseTitle} - Social Media Swipe File`,
-    description: `Discover ${creator.name}'s top performing ${platform} content. Analysis of ${posts.length} viral posts with ${totalEngagement.toLocaleString()} total engagements. ${bio}`,
+    title: `${baseTitle} - Social Swipe Deck`,
+    description: `Discover ${creator.name}'s top performing ${platform} content. Analysis of ${posts.length} viral posts with ${totalEngagement.toLocaleString()} total engagements. ${truncatedBio}`,
     keywords: [
       creator.name,
       platform,
@@ -136,9 +139,16 @@ export async function generateMetadata({
       'engagement analysis'
     ],
     authors: [{ name: creator.name }],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en-US': canonicalUrl,
+      },
+    },
     openGraph: {
       title: baseTitle,
       description: bio,
+      url: canonicalUrl,
       images: [{
         url: creator.profile_picture,
         width: 1200,
@@ -146,7 +156,7 @@ export async function generateMetadata({
         alt: `${creator.name}'s profile picture`
       }],
       type: 'profile',
-      siteName: 'Social Media Swipe File'
+      siteName: 'Social Swipe Deck'
     },
     twitter: {
       card: 'summary_large_image',
@@ -205,14 +215,17 @@ export default async function CreatorPlatformPage({
           {/* Creator Header - Centered */}
           <header className="mb-12 flex flex-col items-center text-center">
             <div className="flex flex-col items-center gap-6 mb-6">
-              <Image
-                src={creator.profile_picture}
-                alt={`Profile picture of ${creator.name}`}
-                width={100}
-                height={100}
-                className="rounded-full"
-                priority
-              />
+              <div className="relative w-32 h-32 rounded-full overflow-hidden">
+                <Image
+                  src={creator.profile_picture}
+                  alt={`${creator.name}'s profile picture`}
+                  fill
+                  sizes="(max-width: 768px) 96px, 128px"
+                  className="object-cover"
+                  priority
+                  quality={90}
+                />
+              </div>
               <div className="text-center">
                 <h1 className="text-4xl font-bold mb-2">
                   <span className="p-name">{creator.name}</span>'s Best {platform} Posts
@@ -254,6 +267,19 @@ export default async function CreatorPlatformPage({
                   </h2>
                 </div>
                 <div className="e-content">
+                  {post.image && (
+                    <div className="relative w-full aspect-video mb-4">
+                      <Image
+                        src={post.image}
+                        alt={`Visual content from ${creator.name}'s ${platform} post`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
+                        className="object-cover rounded-lg"
+                        loading={index === 0 ? "eager" : "lazy"}
+                        quality={85}
+                      />
+                    </div>
+                  )}
                   <PostCard post={post} />
                   {post.explanation && (
                     <div className="mt-6 px-4 space-y-2">
