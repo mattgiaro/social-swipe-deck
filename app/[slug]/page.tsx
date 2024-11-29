@@ -215,12 +215,12 @@ export default async function CreatorPlatformPage({
           {/* Creator Header - Centered */}
           <header className="mb-12 flex flex-col items-center text-center">
             <div className="flex flex-col items-center gap-6 mb-6">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden">
                 <Image
                   src={creator.profile_picture}
                   alt={`${creator.name}'s profile picture`}
                   fill
-                  sizes="(max-width: 768px) 96px, 128px"
+                  sizes="(max-width: 768px) 48px, 64px"
                   className="object-cover"
                   priority
                   quality={90}
