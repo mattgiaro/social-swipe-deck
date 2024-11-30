@@ -13,8 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const urls = creator.platforms.map(platform => ({
       url: `${baseUrl}/best-${creator.id}-${platform.toLowerCase()}-posts`,
       lastModified: creator.updatedAt,
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
+      changeFrequency: 'weekly' as const,
+      priority: 1,
     }))
     console.log(`🔗 Generated URLs for creator ${creator.id}:`, urls)
     return urls
@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'weekly' as const,
       priority: 1,
     },
     {
@@ -36,32 +36,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.3,
     },
-    {
-      url: `${baseUrl}/search`,
-      lastModified: new Date(),
-      changeFrequency: 'hourly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/creators`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    }
   ]
 
   // Generate platform-specific pages
-  const platformPages = ['x', 'linkedin', 'substack'].map(platform => ({
-    url: `${baseUrl}/platform/${platform}`,
-    lastModified: new Date(),
-    changeFrequency: 'daily' as const,
-    priority: 0.6,
-  }))
+  // const platformPages = ['x', 'linkedin', 'substack'].map(platform => ({
+  //   url: `${baseUrl}/platform/${platform}`,
+  //   lastModified: new Date(),
+  //   changeFrequency: 'daily' as const,
+  //   priority: 0.6,
+  //}))
 
   // Combine all URLs, with static pages first, then platform pages, then dynamic creator pages
   return [
     ...staticPages,
-    ...platformPages,
+    //...platformPages,
     ...creatorUrls
   ]
 } 
