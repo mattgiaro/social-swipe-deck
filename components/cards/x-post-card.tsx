@@ -125,7 +125,7 @@ export function XPostCard({ post, isBlurred = false }: XPostCardProps) {
                   </button>
                 </div>
                 
-                {post.post_url && (
+                {post.post_url && !isBlurred && (
                   <a
                     href={post.post_url}
                     target="_blank"
