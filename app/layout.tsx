@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { ClientLayout } from '@/app/client-layout'
 import { GeistSans } from 'geist/font/sans'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://socialswipedeck.com'),
@@ -74,6 +75,7 @@ export default function RootLayout({
       </head>
       <ClientLayout>
         {children}
+        <Analytics />
       </ClientLayout>
     </html>
   )
