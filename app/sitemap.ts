@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getCreatorsForSitemap } from '@/lib/actions/creators'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://socialswipedeck.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.socialswipedeck.com'
   console.log('🌐 Base URL:', baseUrl)
   
   const creators = await getCreatorsForSitemap()
