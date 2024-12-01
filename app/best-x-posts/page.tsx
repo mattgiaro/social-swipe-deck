@@ -93,10 +93,15 @@ export default async function XPlatformPage() {
                   <Link
                     key={creator.id}
                     href={`/best-x-posts/${creator.id}`}
-                    className="flex-shrink-0 group transition-all duration-300 ease-[cubic-bezier(0.2, 0, 0, 1)] hover:scale-125 hover:-translate-y-1 hover:z-10 focus-visible:scale-125 focus-visible:-translate-y-1 focus-visible:z-10"
+                    className="flex-shrink-0 group relative transition-all duration-300 ease-[cubic-bezier(0.2, 0, 0, 1)] hover:scale-125 hover:-translate-y-1 hover:z-10 focus-visible:scale-125 focus-visible:-translate-y-1 focus-visible:z-10"
                     role="listitem"
                     tabIndex={0}
                   >
+                    {/* Tooltip */}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/90 text-white text-sm rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                      {creator.name}
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/90 rotate-45" />
+                    </div>
                     <div className="relative w-[35px] h-[35px] rounded-full overflow-hidden shadow-sm group-hover:shadow-md">
                       {creator.profile_picture ? (
                         <Image
