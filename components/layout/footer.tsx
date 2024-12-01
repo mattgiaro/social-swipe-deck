@@ -3,15 +3,15 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="bg-white">
+    <footer className="bg-background border-t">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-4 rounded-lg bg-indigo-600 p-6 shadow-lg sm:flex-row sm:justify-between">
-          <strong className="text-xl text-white sm:text-xl">
+        <div className="flex flex-col items-center gap-4 rounded-lg bg-primary p-6 shadow-lg sm:flex-row sm:justify-between">
+          <strong className="text-xl text-primary-foreground sm:text-xl">
             Get Access To Full Database For FREE! (Over 1,394+ Posts)
           </strong>
 
           <Link
-            className="inline-flex items-center gap-2 rounded-full border border-white bg-white px-8 py-3 text-indigo-600 hover:bg-transparent hover:text-white focus:outline-none focus:ring active:bg-white/90"
+            className="inline-flex items-center gap-2 rounded-full border border-primary-foreground bg-primary-foreground px-8 py-3 text-primary hover:bg-transparent hover:text-primary-foreground focus:outline-none focus:ring active:bg-primary-foreground/90"
             href="/sign-up"
           >
             <span className="text-xl font-medium">Sign Up</span>
@@ -36,54 +36,46 @@ export function Footer() {
         <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* X (Twitter) Section */}
           <div className="text-center sm:text-left">
-            <p className="text-lg font-medium text-gray-900">X (Twitter)</p>
+            <p className="text-lg font-medium text-foreground">X (Twitter)</p>
             <ul className="mt-8 space-y-4 text-sm">
               <li>
                 <Link 
-                  href="/best-justin-welsh-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
+                  href="/best-x-posts" 
+                  className="text-muted-foreground transition hover:text-foreground"
+                >
+                  Best X Posts To Swipe
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/best-x-posts/justin-welsh" 
+                  className="text-muted-foreground transition hover:text-foreground"
                 >
                   Best Justin Welsh Posts
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/best-dan-koe-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
-                >
-                  Best Dan Koe Posts
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/best-morgan-housel-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
-                >
-                  Best Morgan Housel Posts
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/best-tim-denning-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
+                  href="/best-x-posts/tim-denning" 
+                  className="text-muted-foreground transition hover:text-foreground"
                 >
                   Best Tim Denning Posts
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/best-tim-ferriss-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
+                  href="/best-x-posts/alex-hormozi" 
+                  className="text-muted-foreground transition hover:text-foreground"
                 >
-                  Best Tim Ferriss Posts
+                  Best Alex Hormozi Posts
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/best-naval-x-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
+                  href="/best-x-posts/tiago-forte" 
+                  className="text-muted-foreground transition hover:text-foreground"
                 >
-                  Best Naval Posts
+                  Best Tiago Forte Posts
                 </Link>
               </li>
             </ul>
@@ -91,41 +83,32 @@ export function Footer() {
 
           {/* LinkedIn Section */}
           <div className="text-center sm:text-left">
-            <p className="text-lg font-medium text-gray-900">LinkedIn</p>
+            <p className="text-lg font-medium text-foreground">LinkedIn</p>
             <ul className="mt-8 space-y-4 text-sm">
               <li>
-                <Link 
-                  href="/best-justin-welsh-linkedin-posts" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
-                >
-                  Best Justin Welsh Posts
-                  <span className="ml-2 text-gray-400">(Coming soon)</span>
-                </Link>
+                <span className="text-muted-foreground/75">
+                  All LinkedIn Posts
+                  <span className="ml-2 text-muted-foreground/60">(Coming soon)</span>
+                </span>
               </li>
               <li>
-                <Link 
-                  href="/platform/linkedin" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
-                >
-                  View All LinkedIn Posts
-                  <span className="ml-2 text-gray-400">(Coming soon)</span>
-                </Link>
+                <span className="text-muted-foreground/75">
+                  Best Justin Welsh Posts
+                  <span className="ml-2 text-muted-foreground/60">(Coming soon)</span>
+                </span>
               </li>
             </ul>
           </div>
 
           {/* Substack Section */}
           <div className="text-center sm:text-left">
-            <p className="text-lg font-medium text-gray-900">Substack</p>
+            <p className="text-lg font-medium text-foreground">Substack</p>
             <ul className="mt-8 space-y-4 text-sm">
               <li>
-                <Link 
-                  href="/platform/substack" 
-                  className="text-gray-700 transition hover:text-gray-700/75"
-                >
-                  View All Substack Posts
-                  <span className="ml-2 text-gray-400">(Coming soon)</span>
-                </Link>
+                <span className="text-muted-foreground/75">
+                  All Substack Posts
+                  <span className="ml-2 text-muted-foreground/60">(Coming soon)</span>
+                </span>
               </li>
             </ul>
           </div>
@@ -134,16 +117,16 @@ export function Footer() {
         <div className="mt-16">
           <div className="mt-16 sm:flex sm:items-center sm:justify-between">
             <div className="flex justify-center sm:justify-start">
-              <Link href="/" className="text-xl font-bold text-black">
+              <Link href="/" className="text-xl font-bold text-foreground">
                 Social Swipe Deck
               </Link>
             </div>
 
-            <p className="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-right">
+            <p className="mt-4 text-center text-sm text-muted-foreground sm:mt-0 sm:text-right">
               Copyright &copy; {new Date().getFullYear()}. All rights reserved.{" "}
               <Link 
                 href="/terms" 
-                className="text-gray-500 hover:text-gray-700"
+                className="text-muted-foreground hover:text-foreground"
               >
                 Terms of Service
               </Link>

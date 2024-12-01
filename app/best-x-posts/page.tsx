@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { getFeaturedPosts } from '@/lib/actions/posts'
+import { getXCreators } from '@/lib/actions/creators'
 import { XPostCard } from '@/components/cards/x-post-card'
 import Script from 'next/script'
 import Image from 'next/image'
@@ -56,26 +57,18 @@ function StructuredData({ posts }: { posts: any[] }) {
 export default async function XPlatformPage() {
   const posts = await getFeaturedPosts('X')
   const limitedPosts = posts.slice(0, 10)
+  const creators = await getXCreators()
   
-  // Extract unique creators from posts
-  const creators = Array.from(new Set(posts.map(post => post.creator_id)))
-    .map(creatorId => {
-      const post = posts.find(p => p.creator_id === creatorId)
-      console.log('Creator data:', {
-        id: creatorId,
-        name: post?.creator?.name,
-        handle: post?.creator?.x_handle,
-        profile_picture: post?.creator?.profile_picture
-      })
-      return {
-        id: creatorId,
-        name: post?.creator?.name,
-        handle: post?.creator?.x_handle,
-        bio: post?.creator?.bio,
-        profile_picture: post?.creator?.profile_picture,
-      }
-    })
+  // Transform creators data
+  const transformedCreators = creators
     .filter(creator => creator.name && creator.profile_picture)
+    .map(creator => ({
+      id: creator.creator_id,
+      name: creator.name,
+      handle: creator.x_handle,
+      bio: creator.bio,
+      profile_picture: creator.profile_picture,
+    }))
   
   return (
     <>
@@ -96,7 +89,7 @@ export default async function XPlatformPage() {
                 role="list"
                 aria-label="Content creators"
               >
-                {creators.map((creator) => (
+                {transformedCreators.map((creator) => (
                   <Link
                     key={creator.id}
                     href={`/best-x-posts/${creator.id}`}

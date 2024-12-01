@@ -147,4 +147,27 @@ export async function getCreatorsForSitemap() {
     console.error('Error in getCreatorsForSitemap:', error)
     return [] 
   }
+}
+
+export async function getXCreators() {
+  console.log('🔍 Fetching all X creators...')
+  
+  try {
+    const { data: creators, error } = await supabaseAdmin
+      .from('creators')
+      .select('*')
+      .not('x_handle', 'is', null)
+      .order('name')
+
+    if (error) {
+      console.error('❌ Error fetching X creators:', error)
+      return []
+    }
+
+    console.log('✅ Successfully fetched X creators:', creators.length)
+    return creators
+  } catch (error) {
+    console.error('❌ Error fetching X creators:', error)
+    return []
+  }
 } 
