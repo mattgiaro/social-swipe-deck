@@ -101,7 +101,7 @@ export default async function XPlatformPage() {
                       {creator.profile_picture ? (
                         <Image
                           src={creator.profile_picture}
-                          alt={`${creator.name} (@${creator.handle}) - View their best posts`}
+                          alt={`${creator.name} - View their best posts`}
                           fill
                           sizes="35px"
                           className="object-cover"
