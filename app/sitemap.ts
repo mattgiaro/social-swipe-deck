@@ -8,10 +8,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const creators = await getCreatorsForSitemap()
   console.log('👥 Creators for sitemap:', creators)
 
-  // Generate creator URLs for each platform they're on
+  // Generate platform landing pages
+  const platformPages = ['x', 'linkedin', 'substack'].map(platform => ({
+    url: `${baseUrl}/best-${platform}-posts`,
+    lastModified: new Date(),
+    changeFrequency: 'daily' as const,
+    priority: 0.8,
+  }))
+
+  // Generate creator URLs for each platform they're on using new URL structure
   const creatorUrls = creators.flatMap(creator => {
     const urls = creator.platforms.map(platform => ({
-      url: `${baseUrl}/best-${creator.id}-${platform.toLowerCase()}-posts`,
+      url: `${baseUrl}/best-${platform.toLowerCase()}-posts/${creator.id}`,
       lastModified: creator.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 1,
@@ -22,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   console.log('📍 All creator URLs:', creatorUrls)
 
-  // Define static pages with appropriate priorities and change frequencies
+  // Define static pages with appropriate priorities
   const staticPages = [
     {
       url: baseUrl,
@@ -38,18 +46,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Generate platform-specific pages
-  // const platformPages = ['x', 'linkedin', 'substack'].map(platform => ({
-  //   url: `${baseUrl}/platform/${platform}`,
-  //   lastModified: new Date(),
-  //   changeFrequency: 'daily' as const,
-  //   priority: 0.6,
-  //}))
-
-  // Combine all URLs, with static pages first, then platform pages, then dynamic creator pages
+  // Combine all URLs with proper priority ordering
   return [
     ...staticPages,
-    //...platformPages,
+    ...platformPages,
     ...creatorUrls
   ]
 } 

@@ -8,18 +8,18 @@ export function cn(...inputs: ClassValue[]) {
 export function formatCreatorPageUrl(creatorId: string, platform: string) {
   const normalizedCreatorId = creatorId.toLowerCase()
   const normalizedPlatform = platform.toLowerCase()
-  return `/best-${normalizedCreatorId}-${normalizedPlatform}-posts`
+  return `/best-${normalizedPlatform}-posts/${normalizedCreatorId}`
 }
 
-export function parseCreatorPageUrl(url: string) {
-  const match = url.match(/best-(.*?)-(x|linkedin|substack)-posts/)
+export function parseCreatorPageUrl(path: string, segment: string = 'creatorId') {
+  const match = path.match(/best-(x|linkedin|substack)-posts\/(.*?)$/)
   if (!match) return null
   
-  const [, creatorId, platform] = match
+  const [, platform, identifier] = match
   return {
-    creatorId,
     platform: platform.toLowerCase() === 'x' ? 'X' :
       platform.toLowerCase() === 'linkedin' ? 'LinkedIn' :
-      'Substack'
+      'Substack',
+    [segment]: identifier
   }
 } 
