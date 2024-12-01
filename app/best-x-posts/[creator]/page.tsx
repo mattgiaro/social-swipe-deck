@@ -159,7 +159,7 @@ export default async function CreatorPage({
   return (
     <>
       <StructuredData creator={creator} posts={limitedPosts} />
-      <main className="min-h-screen py-12" role="main">
+      <main className="min-h-screen py-12 bg-background" role="main">
         <article className="h-feed">
           {/* Creator Header - Keep centered with container */}
           <div className="container mx-auto px-4">
@@ -208,8 +208,8 @@ export default async function CreatorPage({
                 key={post.post_id} 
                 className={`h-entry space-y-6 p-6 ${
                   index % 2 === 0 
-                    ? 'bg-white' 
-                    : 'bg-[#5445ff]/10'
+                    ? 'bg-card' 
+                    : 'bg-muted'
                 }`}
                 aria-labelledby={`post-title-${post.post_id}`}
               >
@@ -217,7 +217,7 @@ export default async function CreatorPage({
                   <div className="max-w-[750px] mx-auto w-full">
                     <h2 
                       id={`post-title-${post.post_id}`}
-                      className="text-3xl font-bold p-name"
+                      className="text-3xl font-bold p-name text-foreground"
                     >
                       Post #{index + 1}
                     </h2>
@@ -251,7 +251,7 @@ export default async function CreatorPage({
           {/* CTA Section - Keep centered with container */}
           <div className="container mx-auto px-4">
             <div className="mt-16 text-center max-w-[750px] mx-auto">
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-foreground">
                 Want to See More Posts?
               </h2>
               <p className="text-muted-foreground mb-6">
