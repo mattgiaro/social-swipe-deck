@@ -25,10 +25,10 @@ export function ClientLayout({
             <Button 
               asChild
               className="bg-[#5445FF] hover:bg-[#5445FF]/90 text-white px-6"
-              aria-label="Sign up for free"
+              aria-label="Sign up"
             >
               <Link href="/sign-up">
-                Sign up for free
+                Sign up
               </Link>
             </Button>
           </SignedOut>

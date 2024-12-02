@@ -1,7 +1,9 @@
+'use client'
+
 import * as React from "react"
 import Link from 'next/link'
 import Image from 'next/image'
-import { SignedIn, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { Button } from '@/components/ui/button'
 
 interface HeaderProps {
@@ -32,6 +34,12 @@ export const Header: React.FC<HeaderProps> = ({ children }) => {
 
         <div className="flex items-center gap-1 sm:gap-2 [&>a]:py-1.5 [&>a]:px-3">
           {children}
+          
+          <SignedOut>
+            <Button variant="ghost" asChild>
+              <Link href="/sign-in">Sign in</Link>
+            </Button>
+          </SignedOut>
           
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
