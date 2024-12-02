@@ -6,26 +6,32 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { updatePlatformPreference } from "@/lib/actions/onboarding"
 import type { Platform } from "@/types/user"
+import { toast } from "sonner"
 
 export default function PlatformSelectionPage() {
   const router = useRouter()
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handlePlatformSelect = async (platform: Platform) => {
-    setIsLoading(true)
+  const handlePlatformSelect = (platform: Platform) => {
     setSelectedPlatform(platform)
-    
+  }
+
+  const handleContinue = async () => {
+    if (!selectedPlatform) return
+
+    setIsLoading(true)
     try {
-      const result = await updatePlatformPreference(platform)
+      const result = await updatePlatformPreference(selectedPlatform)
       if (result.success) {
         router.push("/onboarding/newsletter-opt-in")
       } else {
+        toast.error("Failed to save your platform preference. Please try again.")
         throw new Error('Failed to update platform preference')
       }
     } catch (error) {
       console.error('Error:', error)
-      // You might want to show an error message to the user
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -44,6 +50,7 @@ export default function PlatformSelectionPage() {
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "X" ? "default" : "outline"}
             disabled={isLoading}
+            type="button"
           >
             <i className="bi bi-twitter text-xl" />
             X (Twitter)
@@ -54,6 +61,7 @@ export default function PlatformSelectionPage() {
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "LinkedIn" ? "default" : "outline"}
             disabled={isLoading}
+            type="button"
           >
             <i className="bi bi-linkedin text-xl" />
             LinkedIn
@@ -64,9 +72,19 @@ export default function PlatformSelectionPage() {
             className="w-full justify-start gap-2"
             variant={selectedPlatform === "Substack" ? "default" : "outline"}
             disabled={isLoading}
+            type="button"
           >
             <i className="bi bi-substack text-xl" />
             Substack
+          </Button>
+
+          <Button
+            onClick={handleContinue}
+            className="w-full mt-6"
+            disabled={!selectedPlatform || isLoading}
+            type="button"
+          >
+            {isLoading ? "Saving..." : "Continue"}
           </Button>
         </div>
       </Card>
