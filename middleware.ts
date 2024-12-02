@@ -12,7 +12,6 @@ interface UserMetadata {
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
-  '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/webhooks/clerk(.*)',
@@ -43,28 +42,17 @@ export default clerkMiddleware(async (auth, req) => {
   // Get metadata from session claims
   const metadata = sessionClaims?.metadata as UserMetadata || {};
   
-  // Debug log to see what metadata we're getting
-  console.log('Session Claims:', sessionClaims);
-  console.log('Metadata:', metadata);
-  
   // Check if user is fully onboarded (all three fields are present and valid)
   const isFullyOnboarded = 
     metadata?.is_confirmed === true && 
     metadata?.platform_preference && 
     typeof metadata?.opt_in_newsletter === 'boolean';
 
-  // Debug log for onboarding status
-  console.log('Is Fully Onboarded:', isFullyOnboarded, {
-    is_confirmed: metadata?.is_confirmed,
-    platform_preference: metadata?.platform_preference,
-    opt_in_newsletter: metadata?.opt_in_newsletter
-  });
-
   // If user is on onboarding route
   if (isOnboardingRoute(req)) {
-    // If fully onboarded, redirect to home
+    // If fully onboarded, redirect to dashboard
     if (isFullyOnboarded) {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/dashboard', req.url));
     }
     // Otherwise, allow access to onboarding
     return NextResponse.next();
@@ -73,6 +61,11 @@ export default clerkMiddleware(async (auth, req) => {
   // If not fully onboarded and not on onboarding route, redirect to onboarding
   if (!isFullyOnboarded) {
     return NextResponse.redirect(new URL('/onboarding/platform-selection', req.url));
+  }
+
+  // If accessing root path and fully onboarded, redirect to dashboard
+  if (req.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
   // Allow access to protected routes for fully onboarded users

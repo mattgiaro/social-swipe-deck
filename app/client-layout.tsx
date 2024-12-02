@@ -16,6 +16,7 @@ export function ClientLayout({
 }) {
   const pathname = usePathname()
   const isAuthPage = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')
+  const isDashboard = pathname === '/dashboard'
 
   return (
     <ClerkProvider>
@@ -36,7 +37,25 @@ export function ClientLayout({
         <main className="min-h-screen">
           {children}
         </main>
-        {!isAuthPage && <Footer />}
+        {!isAuthPage && (
+          isDashboard ? (
+            <footer className="border-t">
+              <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+                <div className="font-semibold">
+                  Social Swipe Deck
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Copyright © 2024. All rights reserved.{' '}
+                  <Link href="/terms" className="hover:underline">
+                    Terms of Service
+                  </Link>
+                </div>
+              </div>
+            </footer>
+          ) : (
+            <Footer />
+          )
+        )}
       </body>
     </ClerkProvider>
   )
