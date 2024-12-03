@@ -3,8 +3,15 @@ import { unstable_noStore as noStore } from 'next/cache'
 
 type Platform = 'X' | 'LinkedIn' | 'Substack'
 
-export async function getFeaturedPosts(platform?: Platform | null) {
-  noStore()
+interface FetchOptions {
+  cache?: 'force-cache' | 'no-store'
+}
+
+export async function getFeaturedPosts(platform?: Platform | null, options?: FetchOptions) {
+  // Only call noStore() if we're not using force-cache
+  if (!options?.cache || options.cache === 'no-store') {
+    noStore()
+  }
   
   console.log('🔍 Fetching featured posts with creator data...', platform ? `for ${platform}` : 'for all platforms')
   

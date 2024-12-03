@@ -5,6 +5,7 @@ import { GeistSans } from 'geist/font/sans'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from 'sonner'
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://socialswipedeck.com'),
@@ -89,16 +90,37 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" 
         />
       </head>
-      <ClientLayout>
-        {children}
-        <Analytics />
-        <Toaster 
-          position="top-center"
-          expand={true}
-          richColors
-          closeButton
-        />
-      </ClientLayout>
+      <body className="min-h-screen bg-background font-sans antialiased">
+        <ClerkProvider appearance={{
+          baseTheme: undefined,
+          variables: { colorPrimary: '#5445FF' },
+          elements: {
+            formButtonPrimary: 'bg-[#5445FF] hover:bg-[#5445FF]/90',
+            card: 'bg-background',
+            headerTitle: 'text-foreground',
+            headerSubtitle: 'text-muted-foreground',
+            socialButtonsBlockButton: 'bg-background border-border text-foreground hover:bg-muted',
+            socialButtonsBlockButtonText: 'text-foreground',
+            dividerLine: 'bg-border',
+            dividerText: 'text-muted-foreground',
+            formFieldLabel: 'text-foreground',
+            formFieldInput: 'bg-background border-input',
+            footerActionLink: 'text-[#5445FF] hover:text-[#5445FF]/90',
+            formFieldInputShowPasswordButton: 'text-muted-foreground'
+          }
+        }}>
+          <ClientLayout>
+            {children}
+            <Analytics />
+            <Toaster 
+              position="top-center"
+              expand={true}
+              richColors
+              closeButton
+            />
+          </ClientLayout>
+        </ClerkProvider>
+      </body>
     </html>
   )
 }

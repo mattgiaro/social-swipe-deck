@@ -55,9 +55,9 @@ function StructuredData({ posts }: { posts: any[] }) {
 }
 
 export default async function XPlatformPage() {
-  const posts = await getFeaturedPosts('X')
+  const posts = await getFeaturedPosts('X', { cache: 'force-cache' })
   const limitedPosts = posts.slice(0, 10)
-  const creators = await getXCreators()
+  const creators = await getXCreators({ cache: 'force-cache' })
   
   // Transform creators data
   const transformedCreators = creators

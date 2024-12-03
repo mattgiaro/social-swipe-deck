@@ -1,8 +1,13 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { Database } from '@/lib/database.types';
+import { unstable_noStore as noStore } from 'next/cache';
 
 type Creator = Database['public']['Tables']['creators']['Row'];
 type Post = Database['public']['Tables']['posts']['Row'];
+
+interface FetchOptions {
+  cache?: 'force-cache' | 'no-store'
+}
 
 export async function getCreatorByIdAndPlatform(
   creatorId: string, 
@@ -149,7 +154,12 @@ export async function getCreatorsForSitemap() {
   }
 }
 
-export async function getXCreators() {
+export async function getXCreators(options?: FetchOptions) {
+  // Only call noStore() if we're not using force-cache
+  if (!options?.cache || options.cache === 'no-store') {
+    noStore()
+  }
+  
   console.log('🔍 Fetching all X creators...')
   
   try {
