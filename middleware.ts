@@ -12,6 +12,7 @@ interface UserMetadata {
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
+  '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/webhooks/clerk(.*)',
