@@ -28,7 +28,7 @@ export function FilterSection({
 
     const query = params.toString()
     const url = pathname + (query ? `?${query}` : '')
-    router.push(url)
+    router.replace(url, { scroll: false })
   }
 
   return (

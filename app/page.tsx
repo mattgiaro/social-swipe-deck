@@ -8,6 +8,7 @@ import { XPostCard } from "@/components/cards/x-post-card"
 import { LinkedInPostCard } from "@/components/cards/linkedin-post-card"
 import { SubstackPostCard } from "@/components/cards/substack-post-card"
 import { SearchBar } from "@/components/search/search-bar"
+import Link from "next/link"
 
 // Metadata for SEO
 export const metadata: Metadata = {
@@ -117,14 +118,97 @@ export default async function Home({
       </section>
 
       {/* Content Section */}
-      <section className="container mx-auto px-4 py-8">
-        <FilterSection initialPlatform={searchParams.platform} />
-        <Suspense 
-          key={searchParams.platform || 'all'} 
-          fallback={<div>Loading posts...</div>}
-        >
-          <Posts platform={searchParams.platform} />
-        </Suspense>
+      <section className="bg-[#F7F6F9]">
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Choose the social platform:
+          </h2>
+          <FilterSection initialPlatform={searchParams.platform} />
+          {searchParams.platform ? (
+            <>
+              <h2 className="text-2xl font-bold text-center mt-12 mb-6">
+                Now, browse the best posts to swipe:
+              </h2>
+              <Suspense 
+                key={searchParams.platform} 
+                fallback={<div>Loading posts...</div>}
+              >
+                <Posts platform={searchParams.platform} />
+              </Suspense>
+            </>
+          ) : (
+            <div className="text-center mt-12 text-muted-foreground">
+              Select a platform above to view posts
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Benefits CTA Section */}
+      <section className="bg-[#5445FF] text-white py-12 sm:py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-12">
+              Get Access To The Full Swipe File:
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-x-16 gap-y-12">
+              {/* First Benefit */}
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-3">
+                  <i className="bi bi-collection-fill text-4xl" />
+                  <h3 className="text-2xl font-semibold">100% Free</h3>
+                </div>
+                <p className="text-xl text-white/80 pl-[52px]">
+                  Get unlimited access to our complete database of viral posts
+                </p>
+              </div>
+
+              {/* Second Benefit */}
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-3">
+                  <i className="bi bi-folder2-open text-4xl" />
+                  <h3 className="text-2xl font-semibold">Find Posts Based On Categories</h3>
+                </div>
+                <p className="text-xl text-white/80 pl-[52px]">
+                  Browse posts organized by content categories
+                </p>
+              </div>
+
+              {/* Third Benefit */}
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-3">
+                  <i className="bi bi-hash text-4xl" />
+                  <h3 className="text-2xl font-semibold">Find Posts Based On Topics</h3>
+                </div>
+                <p className="text-xl text-white/80 pl-[52px]">
+                  Filter posts by specific topics like Tech, Productivity, Money, etc.
+                </p>
+              </div>
+
+              {/* Fourth Benefit */}
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-3">
+                  <i className="bi bi-people-fill text-4xl" />
+                  <h3 className="text-2xl font-semibold">Find Posts Based On Creators</h3>
+                </div>
+                <p className="text-xl text-white/80 pl-[52px]">
+                  Discover top posts from your favorite creators
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-12">
+              <Link href="/sign-up">
+                <Button 
+                  size="lg" 
+                  className="text-lg bg-white text-[#5445FF] hover:bg-white/90"
+                >
+                  Create Your Free Account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   )
