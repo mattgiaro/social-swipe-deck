@@ -17,16 +17,16 @@ export default async function DashboardPage({
         {/* Welcome */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            Welcome back, {user.firstName || 'there'}
+            Browse The Swipe File:
           </h1>
           <p className="text-muted-foreground">
-            Search for creators to discover their content
+            Never copy. Simply get inspired:
           </p>
         </div>
 
         {/* Search Bar */}
         <div className="max-w-md mx-auto mb-8">
-          <SearchBar />
+          <SearchBar variant="dashboard" />
         </div>
 
         {/* Platform Filter */}

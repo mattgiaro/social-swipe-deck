@@ -8,7 +8,11 @@ import { Creator } from "@/types/creator"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export function SearchBar() {
+interface SearchBarProps {
+  variant?: 'dashboard' | 'homepage'
+}
+
+export function SearchBar({ variant = 'homepage' }: SearchBarProps) {
   const [query, setQuery] = React.useState("")
   const [results, setResults] = React.useState<Creator[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -68,6 +72,7 @@ export function SearchBar() {
           results={results} 
           isLoading={isLoading} 
           onSelect={() => setQuery("")}
+          variant={variant}
         />
       )}
     </div>

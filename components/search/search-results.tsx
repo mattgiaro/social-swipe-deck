@@ -8,9 +8,15 @@ interface SearchResultsProps {
   results: Creator[]
   isLoading: boolean
   onSelect: () => void
+  variant?: 'dashboard' | 'homepage'
 }
 
-export function SearchResults({ results, isLoading, onSelect }: SearchResultsProps) {
+export function SearchResults({ 
+  results, 
+  isLoading, 
+  onSelect,
+  variant = 'homepage'
+}: SearchResultsProps) {
   if (isLoading) {
     return (
       <Card className="absolute top-full mt-1 w-full z-50 max-h-[300px] overflow-auto p-2 dark:bg-black/95 bg-white border-[#5445FF] dark:border-[#5445FF]/50">
@@ -45,7 +51,10 @@ export function SearchResults({ results, isLoading, onSelect }: SearchResultsPro
       {results.map((creator) => (
         <Link
           key={creator.creator_id}
-          href={`/best-x-posts/${creator.creator_id}`}
+          href={variant === 'dashboard' 
+            ? `/creator/${creator.creator_id}`
+            : `/best-x-posts/${creator.creator_id}`
+          }
           className="flex items-center gap-3 p-2 hover:bg-[#5445FF]/5 dark:hover:bg-[#5445FF]/10 rounded-md transition-colors"
           onClick={onSelect}
         >
